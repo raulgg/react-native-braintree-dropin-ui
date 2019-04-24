@@ -40,7 +40,15 @@ RCT_REMAP_METHOD(show,
         self.deviceDataCollector = deviceDataCollector;
     }];
 
-    
+    if ([options[@"requiredCardholderName"] boolValue]) {
+        request.cardholderNameSetting = BTFormFieldRequired;
+    } else if ([options[@"optionalCardholderName"] boolValue]) {
+        request.cardholderNameSetting = BTFormFieldOptional;
+    }
+
+    if(![options[@"paypal"] boolValue]){
+        request.paypalDisabled = YES;
+    }
 
     if([options[@"applePay"] boolValue]){
         self.braintreeClient = [[BTAPIClient alloc] initWithAuthorization:clientToken];

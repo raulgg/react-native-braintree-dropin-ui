@@ -18,6 +18,7 @@ import com.braintreepayments.api.models.PaymentMethodNonce;
 import com.braintreepayments.api.models.CardNonce;
 import com.braintreepayments.api.models.ThreeDSecureInfo;
 import com.braintreepayments.api.models.GooglePaymentRequest;
+import com.braintreepayments.cardform.view.CardForm;
 import com.google.android.gms.wallet.TransactionInfo;
 import com.google.android.gms.wallet.WalletConstants;
 
@@ -52,7 +53,13 @@ public class RNBraintreeDropInModule extends ReactContextBaseJavaModule {
 
     dropInRequest.collectDeviceData(true);
 
-    if(options.getBoolean("googlePay")){
+    if (options.getBoolean("requiredCardholderName")) {
+      dropInRequest.cardholderNameStatus(CardForm.FIELD_REQUIRED);
+    } else if (options.getBoolean("optionalCardholderName")) {
+      dropInRequest.cardholderNameStatus(CardForm.FIELD_OPTIONAL);
+    }
+
+    if (options.getBoolean("googlePay")) {
       GooglePaymentRequest googlePaymentRequest = new GooglePaymentRequest()
         .transactionInfo(TransactionInfo.newBuilder()
           .setTotalPrice(options.getString("orderTotal"))
